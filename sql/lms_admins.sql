@@ -19,7 +19,7 @@ CREATE TABLE `lms_admins` (
 select * from lms_admins;
 
 --
--- Data for table `employee`
+-- Data for table `lms_admins`
 --
 
 INSERT INTO `lms_admins` VALUES 

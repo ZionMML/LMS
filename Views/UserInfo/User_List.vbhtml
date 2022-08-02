@@ -1,15 +1,13 @@
-﻿@ModelType IEnumerable(Of LMS.Models.Admins)
+﻿@ModelType IEnumerable(Of LMS.Models.Users)
 @Code
-    ViewData("Title") = "Admin_List"
+    ViewData("Title") = "User_List"
     Layout = "~/Views/Shared/_Layout.vbhtml"
 End Code
 
-<h2>Admin Info List</h2>
-
+<h2>User Info List</h2>
 <p>
-    @Html.ActionLink("New Admin", "Create", "Admin", Nothing, New With {.class = "btn btn-primary"})
+    @Html.ActionLink("New User", "Create", "UserInfo", Nothing, New With {.class = "btn btn-primary"})
 </p>
-
 @Using (Html.BeginForm())
 
     @Html.AntiForgeryToken()
@@ -17,13 +15,20 @@ End Code
         @Html.ValidationSummary(False, "", New With {.class = "text-danger"})
     </div>
 End Using
-<Table id="admins" Class="table table-bordered table-hover">
+<Table id="users" Class="table table-bordered table-hover">
     <thead>
         <tr>
             <th>ID</th>
             <th>User Id</th>
             <th>User Name</th>
-            <th>Email Address</th>
+            <th>Company</th>
+            <th>Team Lead Name</th>
+            <th>Entitled Annual Leaves</th>
+            <th>Annual Leave Balance</th>
+            <th>Entitled Medical Leaves</th>
+            <th>Medical Leave Balance</th>
+            <th>Entitled Other Leaves</th>
+            <th>Other Leave Balance</th>
             <th>Created By</th>
             <th>Created Date</th>
             <th>Updated By</th>
@@ -33,14 +38,15 @@ End Using
         </tr>
     </thead>
     <tbody></tbody>
-</table>
-
+</Table>
 @Section scripts
     <script>
         $(document).ready(function () {
-            var table = $("#admins").DataTable({
+            $.fn.dataTable.ext.errMode = 'throw';
+
+            var table = $("#users").DataTable({
                 ajax: {
-                    url: "/api/Admin",
+                    url: "/api/UserInfo",
                     dataSrc: ""
                 },
                 columns: [
@@ -54,7 +60,28 @@ End Using
                         data: "USER_NAME"
                     },
                     {
-                        data: "EMAIL_ADDR"
+                        data: "COMPANY"
+                    },
+                    {
+                        data: "TEAM_LEAD_NAME"
+                    },
+                    {
+                        data: "MAX_ANNUAL_LEAVE"
+                    },
+                    {
+                        data: "ANNUAL_LEAVE_BALANCE"
+                    },
+                    {
+                        data: "MAX_MEDICAL_LEAVE"
+                    },
+                    {
+                        data: "MEDICAL_LEAVE_BALANCE"
+                    },
+                    {
+                        data: "MAX_OTHER_LEAVE"
+                    },
+                    {
+                        data: "OTHER_LEAVE_BALANCE"
                     },
                     {
                         data: "CREATED_BY"
@@ -71,7 +98,7 @@ End Using
                     {
                         data: "ID",
                         render: function (data) {
-                            var myUrl = '@Url.Action("Edit", "Admin")/' + data;
+                            var myUrl = '@Url.Action("Edit", "UserInfo")/' + data;
                             return '<a href=\"' + myUrl + '\" class=\"btn-link\">Edit</a>';
                         }
                     },
@@ -91,20 +118,20 @@ End Using
                 ]
             });
 
-            $("#admins").on("click", ".js-delete", function () {
+            $("#users").on("click", ".js-delete", function () {
                 var button = $(this);
 
                 bootbox.confirm("Are you sure you want to delete this record?", function (result) {
                     if (result) {
-                        var admininfoData = {};
-                        admininfoData.ID = button.attr("data-param-id");
+                        var userinfoData = {};
+                        userinfoData.ID = button.attr("data-param-id");
 
                         $.ajax({
                             type: 'POST',
                             async: true,
                             dataType: "json",
-                            url: "/api/Admin/DeleteValue",
-                            data: admininfoData
+                            url: "/api/UserInfo/DeleteValue",
+                            data: userinfoData
                         })
                             .done(function (data) {
                                 if (data.ErrMsg) {
@@ -120,4 +147,4 @@ End Using
             });
         });
     </script>
-End Section 
+End Section

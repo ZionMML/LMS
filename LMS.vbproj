@@ -209,14 +209,21 @@
     <Compile Include="App_Start\WebApiConfig.vb" />
     <Compile Include="Business_Tier\b_Admin.vb" />
     <Compile Include="Business_Tier\b_Admin_Interface.vb" />
+    <Compile Include="Business_Tier\b_LMS_User.vb" />
+    <Compile Include="Business_Tier\b_LMS_User_Interface.vb" />
     <Compile Include="Controllers\AdminController.vb" />
     <Compile Include="Controllers\api\AdminController.vb" />
+    <Compile Include="Controllers\api\UserInfoController.vb" />
+    <Compile Include="Controllers\UserInfoController.vb" />
     <Compile Include="Data_Tier\d_Admin.vb" />
     <Compile Include="Data_Tier\d_Admin_Interface.vb" />
+    <Compile Include="Data_Tier\d_LMS_User.vb" />
+    <Compile Include="Data_Tier\d_LMS_User_Interface.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Admins.vb" />
+    <Compile Include="Models\Users.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -235,6 +242,7 @@
     <Compile Include="Controllers\HomeController.vb" />
     <Compile Include="ViewModels\AdminsViewModel.vb" />
     <Compile Include="ViewModels\LoginViewModel.vb" />
+    <Compile Include="ViewModels\UsersViewModel.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -407,6 +415,8 @@
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
     <Content Include="Content\images\leave-management.png" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -419,6 +429,8 @@
     <Content Include="Content\DataTables\css\semanticui.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -430,6 +442,8 @@
     </None>
     <None Include="packages.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\bootbox.js" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -512,8 +526,12 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Views\Admin\Admin_List.vbhtml" />
     <Content Include="Views\Admin\Admin_Details.vbhtml" />
+    <Content Include="Views\UserInfo\User_List.vbhtml" />
+    <Content Include="Views\UserInfo\User_Details.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

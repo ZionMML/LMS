@@ -1,6 +1,7 @@
 ﻿Imports System.Net
 Imports System.Web.Http
 Imports LMS.Models
+Imports Newtonsoft.Json.Linq
 
 Namespace Controllers.api
     Public Class AdminController
@@ -24,8 +25,10 @@ Namespace Controllers.api
                 intfB_Admin = objAdmin
                 intfB_Admin.b_Get_Admin_Users(Nothing, Nothing, errMsg, dsAdmins)
 
-                If dsAdmins.tables.count <= 0 Then
-
+                If dsAdmins.Tables.Count <= 0 Or dsAdmins.Tables(0).Rows.Count <= 0 Then
+                    errMsg = "(Error) No records found in LMS Admins table."
+                    ModelState.AddModelError("Info", errMsg)
+                    adminList = Nothing
                 Else
                     For Each sdr As DataRow In dsAdmins.Tables(0).rows
                         Dim admins As New Admins
@@ -47,24 +50,27 @@ Namespace Controllers.api
             End Try
         End Function
 
-        ' GET: api/Admin/5
-        Public Function GetValue(ByVal id As Integer) As String
-            Return "value"
+        <HttpPost>
+        Public Function DeleteValue(<FromBody> ByVal data As JObject) As Hashtable
+            Dim listStatus = New Hashtable
+
+            Dim FUNC_NAME As String = Reflection.MethodBase.GetCurrentMethod.Name
+
+            Try
+                Dim strId As String = data("ID").ToObject(Of String)
+                Dim strMsg As String = Nothing
+
+                objAdmin = New b_Admin
+                intfB_Admin = objAdmin
+                intfB_Admin.b_Delete_Admin(strId, strMsg)
+
+                listStatus.Add("ErrMsg", strMsg)
+
+                Return listStatus
+
+            Catch ex As Exception
+
+            End Try
         End Function
-
-        ' POST: api/Admin
-        Public Sub PostValue(<FromBody()> ByVal value As String)
-
-        End Sub
-
-        ' PUT: api/Admin/5
-        Public Sub PutValue(ByVal id As Integer, <FromBody()> ByVal value As String)
-
-        End Sub
-
-        ' DELETE: api/Admin/5
-        Public Sub DeleteValue(ByVal id As Integer)
-
-        End Sub
     End Class
 End Namespace

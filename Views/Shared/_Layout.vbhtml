@@ -21,6 +21,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Admin Profile", "Index", "Admin")</li>
+                    <li>@Html.ActionLink("User Profile", "Index", "UserInfo")</li>
                 </ul>
             </div>
         </div>
