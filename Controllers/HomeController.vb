@@ -2,9 +2,13 @@
     Inherits System.Web.Mvc.Controller
 
     Private dsAdmin = Nothing
+    Private dsUser = Nothing
 
     Private objAdmin As b_Admin
     Private intfB_Admin As b_Admin_Interface
+
+    Private objUser As b_LMS_User
+    Private intfB_User As b_LMS_User_Interface
 
     Function Index(linktext As String) As ActionResult
         ViewData("Title") = "Home LMS Page"
@@ -33,7 +37,15 @@
             If checkAdminUser(UCase(loginInfo.USER_ID), loginInfo.PASSWORD, userName, strMsg) Then
                 AddSession(UCase(loginInfo.USER_ID), userName, isPersistent)
                 isAdminUser = True
+            Else
+                If Not checkLMSUser(UCase(loginInfo.USER_ID), loginInfo.PASSWORD, userName, strMsg) Then
+                    ModelState.AddModelError("Login Error", "(Error) Login Failed.")
+                    Return View("Index", loginInfo)
+                Else
+                    AddSession(UCase(loginInfo.USER_ID), userName, isPersistent)
+                End If
             End If
+
             If isAdminUser Then
                 Session(strAdminUser) = "Y"
                 Return RedirectToAction("Index", "Admin")
@@ -78,6 +90,36 @@
         End Try
     End Function
 
+    Private Function checkLMSUser(ByVal userId As String, ByVal pwd As String, ByRef userName As String, ByRef strMsg As String) As Boolean
+        Dim FUNC_NAME As String = Reflection.MethodBase.GetCurrentMethod.Name
+        Dim password As String = Nothing
+        Try
+            dsUser = New DataSet
+
+            objUser = New b_LMS_User
+            intfB_User = objUser
+            intfB_User.b_Get_LMS_Users(Nothing, userId, strMsg, dsUser)
+
+            If dsUser.tables.count > 0 And dsUser.tables(0).rows.count > 0 Then
+                For Each dr As DataRow In dsUser.tables(0).rows
+                    userName = dr("USER_NAME").ToString
+                    password = dr("PASSWORD").ToString
+                Next
+
+                If password = pwd Then
+                    Return True
+                Else
+                    Return False
+                End If
+
+            Else
+                Return False
+            End If
+
+        Catch ex As Exception
+            strMsg = FUNC_NAME + ex.ToString
+        End Try
+    End Function
     Private Sub AddSession(ByVal userId As String, ByVal userName As String, ByVal isPersistent As Boolean)
 
         Session(strUserId) = userId.Trim()

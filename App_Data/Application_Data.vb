@@ -2,21 +2,14 @@
 Imports LMS.CRUD
 Public Module Application_Data
 
-    Public Sub Get_Admin_Users(ByVal strId As String, ByVal strUserId As String, ByRef dsAdmin As DataSet, ByRef errMsg As String)
-        Dim FUNC_NAME As String = Reflection.MethodBase.GetCurrentMethod.Name
-        Dim sql As String
-        Try
-            sql = "select * from LMS_ADMINS "
-            If strId IsNot Nothing Then
-                sql = sql + "where ID = '" & strId & "'"
-            ElseIf strUserId IsNot Nothing Then
-                sql = sql + "where USER_ID = '" & strUserId & "'"
-            End If
+    Public Const LMS_Annual_Leave As String = "Annual Leave"
+    Public Const LMS_Medical_Leave As String = "Medical Leave"
+    Public Const LMS_Other_Leave As String = "Other Leave"
 
-            GetData(sql, dsAdmin, errMsg)
+    Public Const LMS_Pending_Approve_Status As String = "Pending Approve"
+    Public Const LMS_Pending_Cancel_Status As String = "Pending Cancel"
+    Public Const LMS_Approved_Status As String = "Approved"
+    Public Const LMS_Canceled_Status As String = "Canceled"
 
-        Catch ex As Exception
-            errMsg = "Error on Get_Admin_Users:" + ex.ToString
-        End Try
-    End Sub
+    Public Const LMS_Emails_Group As String = "LMS_EMAILS"
 End Module

@@ -1,5 +1,4 @@
 ﻿Imports LMS.ViewModels
-Imports oracle.dataacess.client
 
 Public Class d_LMS_User
     Implements d_LMS_User_Interface

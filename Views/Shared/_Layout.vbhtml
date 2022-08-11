@@ -22,7 +22,19 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Admin Profile", "Index", "Admin")</li>
                     <li>@Html.ActionLink("User Profile", "Index", "UserInfo")</li>
+                    <li class="nav-item dropdown">
+                        <a class="navbar-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                            Leaves
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item">@Html.ActionLink("Leaves History", "Index", "History")</a><br />
+                            <a class="dropdown-item">@Html.ActionLink("Leaves Summary", "Index", "Summary")</a><br />
+                            <a class="dropdown-item">@Html.ActionLink("Leaves Summary Calendar", "Index", "LoadHtml")</a>
+                        </div>
+                    </li>
+                    <li nav-item>@Html.ActionLink("Change Password", "UpdatePassword", "UserInfo")</li>
                 </ul>
+                <h5 style="color:white;padding-top:8px">@Html.Raw(ViewBag.LoginUserId)</h5>
             </div>
         </div>
     </div>
