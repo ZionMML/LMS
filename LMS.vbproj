@@ -249,6 +249,7 @@
     <Compile Include="ViewModels\AdminsViewModel.vb" />
     <Compile Include="ViewModels\HistoryViewModel.vb" />
     <Compile Include="ViewModels\LoginViewModel.vb" />
+    <Compile Include="ViewModels\SummaryViewModel.vb" />
     <Compile Include="ViewModels\UsersViewModel.vb" />
   </ItemGroup>
   <ItemGroup>

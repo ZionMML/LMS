@@ -186,7 +186,7 @@ Public Class b_Leaves
                 intfDObj = ClsDObj
             End If
 
-            intfDObj.d_Check_Leaves_Valid(userId,
+            Return intfDObj.d_Check_Leaves_Valid(userId,
                                      leaveId,
                                      leaveFrom,
                                      leaveTo,

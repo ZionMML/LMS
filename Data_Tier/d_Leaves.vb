@@ -11,14 +11,10 @@ Public Class d_Leaves
         Dim sql As String
         Try
             sql = " select H.*, U.USER_NAME from LMS_LEAVES_HISTORY H, " &
-                  " LMS_USERS U where H.USER_ID = U.USER_ID "
-            If String.IsNullOrEmpty(startDt) Then
-                sql = sql & " and H.UPDATED_DATE between sysdate() - 30 " &
-                            " and sysdate() + 30 "
-            Else
-                sql = sql & " And H.UPDATED_DATE between to_date('" & startDt & "','dd/mm/yyyy') " &
-                            " and to_date('" & endDt & "','dd/mm/yyyy')"
-            End If
+                  " LMS_USERS U where H.USER_ID = U.USER_ID " &
+                  " And H.UPDATED_DATE between str_to_date('" & CDate(startDt).ToString("dd/MM/yyyy") & "','%d/%m/%Y') " &
+                  " and str_to_date('" & CDate(endDt).ToString("dd/MM/yyyy") & "','%d/%m/%Y')"
+
 
             GetData(sql, dsLeaves, errMsg)
 
@@ -168,8 +164,8 @@ Public Class d_Leaves
                   " TOTAL_TAKEN_LEAVE, REMARKS, " &
                   " STATUS, DOCUMENTS, UPDATED_BY, UPDATED_DATE) values (" &
                   "" & newId & ",'" & currentUserId.ToUpper & "','" & leavesInfo.LEAVE_TYPE & "', " &
-                  " TO_DATE('" & CDate(leavesInfo.LEAVE_FROM) & "','dd/mm/yyyy'),'" & leavesInfo.LEAVE_FROM_AMPM & "', " &
-                  " TO_DATE('" & CDate(leavesInfo.LEAVE_TO) & "','dd/mm/yyyy'),'" & leavesInfo.LEAVE_TO_AMPM & "', " &
+                  " STR_TO_DATE('" & CDate(leavesInfo.LEAVE_FROM).ToString("dd/MM/yyyy") & "','%d/%m/%Y'),'" & leavesInfo.LEAVE_FROM_AMPM & "', " &
+                  " STR_TO_DATE('" & CDate(leavesInfo.LEAVE_TO).ToString("dd/MM/yyyy") & "','%d/%m/%Y'),'" & leavesInfo.LEAVE_TO_AMPM & "', " &
                   "" & leavesInfo.HIDDEN_TOTAL_LEAVE_TAKEN & ",'" & leavesInfo.REMARKS & "', " &
                   "'" & LMS_Pending_Approve_Status & "','" & leavesInfo.HIDDEN_DOCUMENT & "'," &
                   "'" & currentUserId & "', sysdate())"
@@ -189,9 +185,9 @@ Public Class d_Leaves
         Try
             sql = "update LMS_LEAVES_HISTORY set " &
                   " LEAVE_TYPE = '" & leavesInfo.LEAVE_TYPE & "', " &
-                  " LEAVE_FROM = TO_DATE('" & CDate(leavesInfo.LEAVE_FROM) & "','dd/mm/yyyy'), " &
+                  " LEAVE_FROM = STR_TO_DATE('" & CDate(leavesInfo.LEAVE_FROM).ToString("dd/MM/yyyy") & "','%d/%m/%Y'), " &
                   " LEAVE_FROM_AMPM = '" & leavesInfo.LEAVE_FROM_AMPM & "', " &
-                  " LEAVE_TO = TO_DATE('" & CDate(leavesInfo.LEAVE_TO) & "','dd/mm/yyyy'), " &
+                  " LEAVE_TO = STR_TO_DATE('" & CDate(leavesInfo.LEAVE_TO).ToString("dd/MM/yyyy") & "','%d/%m/%Y'), " &
                   " LEAVE_TO_AMPM = '" & leavesInfo.LEAVE_TO_AMPM & "', " &
                   " TOTAL_TAKEN_LEAVE = " & leavesInfo.HIDDEN_TOTAL_LEAVE_TAKEN & ", " &
                   " REMARKS = '" & leavesInfo.REMARKS & "', " &
@@ -289,14 +285,14 @@ Public Class d_Leaves
             dsLeaves = New DataSet
 
             sql = " select 1 as count from lms_leaves_history " &
-                  " where ((to_date('" & leaveFrom & "','dd/mm/yyyy') " &
+                  " where ((str_to_date('" & leaveFrom.Replace("-", "/") & "','%d/%m/%Y') " &
                   " between leave_from and leave_to) or " &
-                  " (to_date('" & leaveTo & "','dd/mm/yyyy') " &
+                  " (str_to_date('" & leaveTo.Replace("-", "/") & "','%d/%m/%Y') " &
                   " between leave_from and leave_to)) " &
                   " and user_id = '" & userId.ToUpper & "' and status <> '" & LMS_Canceled_Status & "' "
             If leaveId IsNot Nothing Then
                 'For Edit record, need to exclude own record for checking
-                sql = sql & " and id <> '" & leaveId & ""
+                sql = sql & " and id <> '" & leaveId & "'"
             End If
 
             GetData(sql, dsLeaves, errMsg)

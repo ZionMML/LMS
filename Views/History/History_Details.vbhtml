@@ -11,7 +11,7 @@ End Code
 
     @<div class="form-horizontal">
     <hr />
-    @Html.ValidationSummary(True, "", New With {.class = "text-danger"})
+    @Html.ValidationSummary(False, "", New With {.class = "text-danger"})
     <div class="form-group">
         @Html.LabelFor(Function(model) model.USER_ID, htmlAttributes:=New With {.class = "control-label col-md-2"})
         <div class="col-md-10">
@@ -272,7 +272,7 @@ End Using
 
             function calculate_leaves_taken() {
                 var start = $('#LEAVE_FROM').datepicker("getDate");
-                var end = $('#LEAVE_FROM').datepicker("getDate");
+                var end = $('#LEAVE_TO').datepicker("getDate");
 
                 var startAMPM = $('#LEAVE_FROM_AMPM').val();
                 var endAMPM = $('#LEAVE_TO_AMPM').val();
@@ -300,9 +300,10 @@ End Using
                         .done(function (data) {
                             if (data.ErrMsg) {
                                 alert(data.ErrMsg);
-                            } else {
-                                $('#TOTAL_TAKEN_LEAVE').val(datat.ttlLeaves);
-                                $('#HIDDENT_TOTAL_LEAVE_TAKEN').val(data.ttlLeaves);
+                            } else {                                
+                                $('#TOTAL_TAKEN_LEAVE').val(data.ttlLeaves);
+                                $('#HIDDEN_TOTAL_LEAVE_TAKEN').val(data.ttlLeaves);
+                                
                             }
                         })
                         .fail(function (err) {

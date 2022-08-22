@@ -27,7 +27,88 @@ Public Class HistoryController
         End Try
     End Function
 
+    <HttpPost>
+    Public Function GetLeaves(<FromBody> ByVal data As JObject) As IEnumerable(Of HistoryViewModel)
+        Dim FUNC_NAME As String = Reflection.MethodBase.GetCurrentMethod.Name
 
+        Dim leaveList As New List(Of HistoryViewModel)
+        Dim strMsg = Nothing
+
+        Try
+            Dim startDt As String = data("startDate").ToObject(Of String)
+            Dim endDt As String = data("endDate").ToObject(Of String)
+
+            leaveList = RetrieveLeaves(startDt, endDt, strMsg)
+
+            Return leaveList
+        Catch ex As Exception
+
+        End Try
+    End Function
+
+    <AcceptVerbs("CAL")>
+    Public Function CalculateLeaves(<FromBody> ByVal data As JObject) As Hashtable
+        Dim FUNC_NAME As String = Reflection.MethodBase.GetCurrentMethod.Name
+        Try
+            Dim intReturn_Code = 0
+            Dim strMessage = Nothing
+            Dim listStatus = New Hashtable
+
+            Dim startDt As String = data("startDt").ToObject(Of String)
+            Dim endDt As String = data("endDt").ToObject(Of String)
+            Dim startAMPM As String = data("startAMPM").ToObject(Of String)
+            Dim endAMPM As String = data("endAMPM").ToObject(Of String)
+
+            Dim days As Decimal = DateDiff(DateInterval.Day, CDate(startDt), CDate(endDt))
+
+            Dim tmpDate = CDate(CDate(startDt).ToString("dd/MM/yyyy"))
+            Dim checkDate = Date.Parse(tmpDate).DayOfWeek
+
+            Dim totalDays = days
+
+            'to check Weekends or Holidays
+            For i = 0 To totalDays
+                If checkDate.ToString = "Saturday" Or checkDate.ToString = "Sunday" Then
+                    days = days - 1
+                Else
+                    'check holidays
+                    'if so, ...
+                    ' days = days - 1 
+                End If
+
+                If i <> totalDays Then
+                    tmpDate = tmpDate.AddDays(1)
+                    checkDate = Date.Parse(tmpDate.ToString()).DayOfWeek
+                End If
+            Next
+
+            If days = 0 Then
+                If startAMPM = "PM" And endAMPM = "AM" Then
+                    listStatus.Add("ErrMsg", "(Error) Same day Leave. Leave From is PM but Leave To cannot be AM.")
+                    listStatus.Add("ttlLeaves", 0)
+                    Return listStatus
+                End If
+            End If
+
+            If startAMPM = endAMPM Then
+                days = days + 0.5
+            Else
+                If days <> 0 And startAMPM = "PM" Then 'not same day leave and From Date is PM
+                    days = days
+                Else
+                    days = days + 1
+                End If
+            End If
+
+            listStatus.Add("ErrMsg", Nothing)
+            listStatus.Add("ttlLeaves", days)
+
+            Return listStatus
+
+        Catch ex As Exception
+
+        End Try
+    End Function
     Private Function RetrieveLeaves(ByVal startDt As String,
                                     ByVal endDt As String,
                                     ByRef strMsg As String) As IEnumerable(Of HistoryViewModel)

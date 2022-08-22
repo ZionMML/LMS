@@ -28,7 +28,7 @@ End Code
             <button type="button" id="btnFind" value="Find" class="btn btn-primary">Find</button>
         </div>
         <div class="form-group">
-            <table id="history" class="table table-bordered table-hover">
+            <Table id="history" class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -45,10 +45,11 @@ End Code
                         <th>Updated Date</th>
                         <th>Approved By</th>
                         <th>Approved Date</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody></tbody>
-            </table>
+            </Table>
             @Html.HiddenFor(Function(model) model.ISADMIN)
         </div>
     </div>
@@ -59,7 +60,6 @@ End Using
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css"
           rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js">
-
     </script>
     <script>
         $(document).ready(function () {
@@ -90,7 +90,7 @@ End Using
                 if ($('#START_DATE').val() != '' && $('#END_DATE').val() == '') {
                     alert('(Error) End Date cannot be empty!');
                     return;
-                } else if ($('#START_DATE').vale() == '' && $('#END_DATE').val() != '') {
+                } else if ($('#START_DATE').val() == '' && $('#END_DATE').val() != '') {
                     alert('(Error) Start Date cannot be empty!');
                     return;
                 }
@@ -139,6 +139,7 @@ End Using
                         dataType: "json",
                         url: "/api/History/GetLeaves",
                         data: searchInfo,
+                        dataSrc: "",
                         success: ListSuccess
                     });
                 }
@@ -149,7 +150,7 @@ End Using
             };
 
             function InitDataTable() {
-                table = $("#history").DataTable({
+               table = $("#history").DataTable({
                     columns: [
                         {
                             data: "ID"
@@ -196,12 +197,8 @@ End Using
                         {
                             data: "ID",
                             render: function (data) {
-                                var detailsURL = '@Url.Action("Edit", "History")/' + data;
-                                var cancelURL = '@Url.Action("Cancel", "History")/' + data;
-                                var resubmitURL = '@Url.Action("Resubmit")/' + data;
-                                return '<a href=\"' + detailsURL + '\" class=\"btn-link\">Details</a>';
-                                return '<a href=\"' + cancelURL + '\" class=\"btn-link\">Cancel</a>';
-                                return '<a href=\"' + resubmitURL + '\" class=\"btn-link\">Re-submit</a>';
+                                var detailsURL = '@Url.Action("Edit", "History")/' + data;                             
+                                return '<a href=\"' + detailsURL + '\" class=\"btn-link\">Details</a>';                            
                             }
                         }
                     ]

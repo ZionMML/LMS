@@ -75,19 +75,19 @@ Namespace Controllers
                     For Each dr As DataRow In dsLeaves.Tables(0).Rows
                         leaveInfo.HIDDEN_ID = dr("ID").ToString()
                         leaveInfo.USER_ID = dr("USER_ID").ToString()
-                        leaveInfo.HIDDEN_USER_ID = dr("HIDDEN_USER_ID").ToString()
+                        leaveInfo.HIDDEN_USER_ID = leaveInfo.USER_ID
                         leaveInfo.LEAVE_TYPE = dr("LEAVE_TYPE").ToString()
-                        leaveInfo.LEAVE_FROM = dr("LEAVE_FROM").ToString()
+                        leaveInfo.LEAVE_FROM = CDate(dr("LEAVE_FROM").ToString()).ToString("dd-MM-yyyy")
                         leaveInfo.LEAVE_FROM_AMPM = dr("LEAVE_FROM_AMPM").ToString()
-                        leaveInfo.LEAVE_TO = dr("LEAVE_TO").ToString()
+                        leaveInfo.LEAVE_TO = CDate(dr("LEAVE_TO").ToString()).ToString("dd-MM-yyyy")
                         leaveInfo.LEAVE_TO_AMPM = dr("LEAVE_TO_AMPM").ToString()
                         leaveInfo.TOTAL_TAKEN_LEAVE = dr("TOTAL_TAKEN_LEAVE").ToString()
-                        leaveInfo.HIDDEN_TOTAL_LEAVE_TAKEN = dr("HIDDEN_TOTAL_LEAVE_TAKEN").ToString()
+                        leaveInfo.HIDDEN_TOTAL_LEAVE_TAKEN = leaveInfo.TOTAL_TAKEN_LEAVE
                         leaveInfo.REMARKS = dr("REMARKS").ToString()
                         leaveInfo.STATUS = dr("STATUS").ToString()
-                        leaveInfo.HIDDEN_STATUS = dr("HIDDEN_STATUS").ToString()
-                        leaveInfo.HIDDEN_DOCUMENT = dr("HIDDEN_DOCUMENT").ToString()
-                        leaveInfo.HIDDEN_APPROVED_BY = dr("HIDDEN_APPROVED_BY").ToString()
+                        leaveInfo.HIDDEN_STATUS = leaveInfo.STATUS
+                        leaveInfo.HIDDEN_DOCUMENT = dr("DOCUMENTS").ToString()
+                        leaveInfo.HIDDEN_APPROVED_BY = dr("APPROVED_BY").ToString()
 
                         ViewBag.Message += GetUploadedFileLink(leaveInfo.USER_ID, leaveInfo.HIDDEN_DOCUMENT)
                     Next
@@ -231,6 +231,8 @@ Namespace Controllers
             Dim dsLeaves = Nothing
             Dim strMsg = Nothing
             Try
+                dsLeaves = New DataSet
+
                 objLeaves = New b_Leaves
                 intfB_Leaves = objLeaves
                 intfB_Leaves.b_Get_Leaves(id, strMsg, dsLeaves)
