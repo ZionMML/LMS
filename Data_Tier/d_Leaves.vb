@@ -30,23 +30,34 @@ Public Class d_Leaves
         Dim FUNC_NAME As String = Reflection.MethodBase.GetCurrentMethod.Name
         Dim sql As String
         Try
-            sql = " select distinct u.user_id, user_name, leave_types, entitled_leaves, " &
-                " case h.status when 'Approved' then nvl (h.total_taken_leave, 0) " &
-                " else 0 end total_leaves_taken, " &
-                " nvl (u.leave_balance, 0) leave_balance " &
-                " from (select * from lms_users u " &
-                " unpivot ((entitled_leaves, leave_balance) for leave_types " &
-                " in ((max_annual_leave, annual_leave_balance) as '" & LMS_Annual_Leave & "', " &
-                " (max_medical_leave, medical_leave_balance) as '" & LMS_Medical_Leave & "', " &
-                " (max_other_leave, other_leave_balance) as '" & LMS_Other_Leave & "')) "
+            sql = " Select distinct u.user_id, u.user_name, u.leave_types, u.entitled_leaves, " &
+                  " Case h.status When 'Approved' then IFNULL(h.total_taken_leave, 0)  else 0 end total_leaves_taken, " &
+                  " IFNULL(u.leave_balance,0) leave_balance " &
+                  " from( " &
+                  " select user_id, user_name, 'Annual Leave' as leave_types, max_annual_leave as entitled_leaves, annual_leave_balance as leave_balance from lms_users "
 
             If Not isAdmin Then
                 sql = sql & " where user_id = '" & currentUserId.ToUpper & "' "
             End If
 
-            sql = sql & ") u left join lms_leaves_history h on h.user_id = u.user_id" *
-                        " and h.leave_type = u.leave_types " &
-                        " order by user_id, leave_types "
+            sql = sql & " union all " &
+                  " Select user_id, user_name, 'Medical Leave' as leave_types, max_medical_leave as entitled_leaves, medical_leave_balance as leave_balance from lms_users "
+
+            If Not isAdmin Then
+                sql = sql & " where user_id = '" & currentUserId.ToUpper & "' "
+            End If
+
+            sql = sql & " union all " &
+                  " Select user_id, user_name, 'Other Leave' as leave_types, max_other_leave as entitled_leaves, other_leave_balance as leave_balance from lms_users "
+
+            If Not isAdmin Then
+                sql = sql & " where user_id = '" & currentUserId.ToUpper & "' "
+            End If
+
+            sql = sql & " ) u left join lms_leaves_history h " &
+                  " On h.user_id = u.user_id " &
+                  " And  binary h.leave_type = binary u.leave_types " &
+                  " order by u.user_id, u.leave_types "
 
             GetData(sql, dsLeavesUser, errMsg)
 
