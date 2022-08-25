@@ -218,6 +218,7 @@
     <Compile Include="Controllers\api\SummaryController.vb" />
     <Compile Include="Controllers\api\UserInfoController.vb" />
     <Compile Include="Controllers\HistoryController.vb" />
+    <Compile Include="Controllers\LoadHtmlController.vb" />
     <Compile Include="Controllers\SummaryController.vb" />
     <Compile Include="Controllers\UserInfoController.vb" />
     <Compile Include="Data_Tier\d_Admin.vb" />
@@ -531,6 +532,7 @@
     <Content Include="Views\History\History_Details.vbhtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Summary\Summary_List.vbhtml" />
+    <Content Include="Views\LoadHtml\Index.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
